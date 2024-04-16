@@ -3,6 +3,7 @@ library(shinyjs)
 library(igraph)
 library(cheddar)
 
+# simple random example ----
 #g <- make_ring(10) %>% set_vertex_attr("name", value = LETTERS[1:10])
 #g <- graph_from_adjacency_matrix(PredationMatrix(TL84))
 
@@ -11,24 +12,40 @@ library(cheddar)
 # plot(g)
 # plot(delete_vertices(g, 6))
 
-### Cheddar Code
-g <- graph(c("Pred 1","Herb 2","Pred 1","Herb 3","Herb 2",'Plant 4',"Herb 2","Plant 5","Herb 3","Plant 6"))
+# Cheddar Code ----
+
+# nodes and links (pairs are links)
+g <- graph(c("Pred 1","Herb 2",
+             "Pred 1","Herb 3",
+             "Herb 2",'Plant 4',
+             "Herb 2","Plant 5",
+             "Herb 3","Plant 6"))
+
+# cheddar community pieces
 prop <- list(title = "foodweb")
 nn <- data.frame(node = names(V(g)))
 TL <- as_data_frame(g, what = "edges")
 colnames(TL) <- c("consumer","resource")
+
+# build community
 gg <- Community(properties = prop, 
                 nodes = nn, 
                 trophic.links = TL)
-plot(gg, show.nodes.as = "labels", node.labels = NPS(gg)$node)
 
+## view of inital community by trophic level - test plot ----
+
+# PlotWebByLevel(gg, show.nodes.as = "labels", colour.by = 'resolved.to', node.labels = NPS(gg)$node)
+
+#plot(igraph::graph_from_adjacency_matrix(PredationMatrix(gg)))
+
+# example removal
 # gg2 <- RemoveNodes(gg, remove = 6, method = "cascade")
 # labs2 <- gg2$nodes$node
 # plot(gg2, show.nodes.as = "labels", node.labels = labs2)
-# # 
 
+# Shiny Units ----
 
- ## UI
+## UI ----
 ui <- fluidPage( 
   titlePanel("Secondary Extinction Dynamics - A Game"),
   sidebarLayout(
@@ -59,7 +76,8 @@ ui <- fluidPage(
   )
 )
 
-## SERVER
+## SERVER ----
+
 server <- function(input, output, session) {
   my <- reactiveValues(gg=gg,
                        labs = NPS(gg)$node)
@@ -76,12 +94,12 @@ server <- function(input, output, session) {
     
   })
   
-  output$graphPlot <- renderPlot(plot(my$gg, 
+  output$graphPlot <- renderPlot(PlotWebByLevel(my$gg, 
                                       show.nodes.as = "labels", 
                                       node.labels = my$labs))
 }
 
 shinyApp(ui = ui, server = server)
 
-# Run the application 
+# Run the application ----
 shinyApp(ui = ui, server = server)
