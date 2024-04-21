@@ -60,18 +60,22 @@ ui <- fluidPage(
     
     # Show a plot of the graph
     mainPanel(
-      p("This is a simple game where you choose to make a species extinct and what the consequences 'cascade' through
+      p("This is a simple game where you choose to make a species extinct and reveal what the consequences 
+        are as these extinctions 'cascade' through
         a food web."),
+      p("The food web is shown below and has 6 species comprised of 3 plants, 2 herbivores and 1 predator.  
+        The numbers on the left defined 'trophic levels'"),
       br(),
-      p("When a species goes extinct, sometimes it can affect other species, leading
-        to a secondary extinction.  The most often happens when a resource goes extinct leaving
-        a species with nothing else to eat.  Can you predict for which species' such an event might happen?"),
-        p("What is the difference between making Plant 4 versus Plant 6 go extinct?"),
-      p("Choose one and then click Refresh Food Web to try the next option"),
-      
-      hr(),
-      p("Now, consider deleting Plant 4.  What situation does this create?  What will happen if you next 
-        delete either of the plants?"),
+      p("SECONDARY EXTINCTIONS: When a species goes extinct, sometimes it can affect other species, leading
+        to a secondary extinction. The most often happens when a resource goes extinct leaving
+        a species with nothing else to eat."),
+      br(),
+      p("Let's see if you you identify for which species there will be no secondary extinctions and for which species there
+        will be at least one secondary extinction"),
+      p("Choose the species you want to make extinct (primary extinction) and then press evaluate to see the consequences.  
+        You can reset the foodweb (Refresh Food Web) to try another example."),
+      p("Are there any primary extinctions that might lead to the loss of more than one additional species"),
+      p("Is there a sequence of primary extinctions that can lead to 'community collapse'?"),
       plotOutput("graphPlot"))
   )
 )
@@ -96,7 +100,8 @@ server <- function(input, output, session) {
   
   output$graphPlot <- renderPlot(PlotWebByLevel(my$gg, 
                                       show.nodes.as = "labels", 
-                                      node.labels = my$labs))
+                                      node.labels = my$labs,
+                                      cex = 1.2, main = ""))
 }
 
 shinyApp(ui = ui, server = server)
