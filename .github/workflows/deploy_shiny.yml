@@ -13,8 +13,10 @@ jobs:
         - uses: r-lib/actions/setup-r@master
         - name: install-packages
           run: |
-           Rscript -e "install.packages(c('shiny', 'rsconnect', 'remotes', 'here', 'shinyjs','igraph','cheddar'), type = 'binary')"
-           Rscript -e "remotes::install_deps(type = 'binary', force = FALSE)"
+           Rscript -e "install.packages(c('rsconnect', 'renv', 'here'), type = 'binary')"
+        - name: renv-installs
+          run: |
+           Rscript -e "renv::restore()"
         - name: authorise-shiny
           run: |
            Rscript -e "rsconnect::setAccountInfo(name='andrew-beckerman', token='${{secrets.SHINYAPPS_TOKEN}}', secret='${{secrets.SHINYAPPS_SECRET}}')"
