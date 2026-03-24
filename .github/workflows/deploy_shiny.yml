@@ -1,0 +1,25 @@
+name: deploy-shiny
+
+on:
+    push:
+      branches:
+        - master
+
+jobs:
+    deploy-shiny:
+      runs-on: macOS-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: r-lib/actions/setup-r@master
+        - name: install-packages
+          run: |
+           Rscript -e "install.packages(c('rsconnect', 'renv', 'here'), type = 'binary')"
+        - name: renv-installs
+          run: |
+           Rscript -e "renv::restore()"
+        - name: authorise-shiny
+          run: |
+           Rscript -e "rsconnect::setAccountInfo(name='andrew-beckerman', token='${{secrets.SHINYAPPS_TOKEN}}', secret='${{secrets.SHINYAPPS_SECRET}}')"
+        - name: deploy-game
+          run: |
+           Rscript -e "rsconnect::deployApp(appDir =  here::here('igraphing'), appFiles = c('app.R'), appName = 'SecondaryExtinctionGame')"
