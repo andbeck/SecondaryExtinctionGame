@@ -59,7 +59,7 @@ ui <- fluidPage(
       h5("Primary Extinctions"),
       uiOutput("primaryExtinctList"),
       h5("Secondary Extinctions"),
-      uiOutput("secondaryExtinctList"),,
+      uiOutput("secondaryExtinctList"),
       
       hr(),
     ),
@@ -147,6 +147,25 @@ server <- function(input, output, session) {
     before_nodes <- valid_nodes
     deleted <- input$vertexToDelete
     
+    # HANDLE LAST SPECIES (avoid cheddar crash)
+    if(length(before_nodes) == 1) {
+      
+      # record extinction
+      my$extinct_primary <- unique(c(my$extinct_primary, deleted))
+      
+      # no more secondary extinctions possible
+      my$extinct_secondary <- my$extinct_secondary
+      
+      # mark ecosystem as empty
+      my$gg <- NULL
+      
+      # clear dropdown
+      updateSelectInput(session, "vertexToDelete", choices = character(0))
+      
+      return()
+    }
+    
+    # NORMAL CASCADE
     my$gg <- RemoveNodes(my$gg, deleted, method = "cascade")
     
     after_nodes <- NPS(my$gg)$node
@@ -158,6 +177,23 @@ server <- function(input, output, session) {
     
     updateSelectInput(session, "vertexToDelete", choices = after_nodes)
   })
+  
+  observeEvent(input$refresh, {
+  
+  # reset ecosystem
+  my$gg <- gg
+  
+  # clear graveyard
+  my$extinct_primary <- character()
+  my$extinct_secondary <- character()
+  
+  # reset dropdown
+  updateSelectInput(
+    session,
+    "vertexToDelete",
+    choices = NPS(my$gg)$node
+  )
+})
   
   # =========================
   # GRAVEYARD UI OUTPUTS
@@ -186,6 +222,13 @@ server <- function(input, output, session) {
   # PLOTTING ENGINE
   # =========================
   output$graphPlot <- renderPlot({
+    
+    if(is.null(my$gg)) {
+      plot.new()
+      title("Food Web Cascade")
+      text(0.5, 0.5, "Entire ecosystem extinct", cex = 1.5)
+      return()
+    }
     
     current_igraph <- graph_from_adjacency_matrix(PredationMatrix(my$gg))
     
