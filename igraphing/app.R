@@ -168,7 +168,32 @@ server <- function(input, output, session) {
     }
     
     # NORMAL CASCADE
-    my$gg <- RemoveNodes(my$gg, deleted, method = "cascade")
+    # Get nodes BEFORE removal
+    nodes_before <- NPS(my$gg)$node
+    
+    # Predict nodes AFTER removal using a safe clone
+    gg_test <- my$gg
+    
+    gg_test <- tryCatch(
+      RemoveNodes(gg_test, deleted, method = "cascade"),
+      error = function(e) NULL
+    )
+    
+    # If removal would empty the community → handle manually
+    if(is.null(gg_test) || length(NPS(gg_test)$node) == 0) {
+      
+      my$extinct_primary <- unique(c(my$extinct_primary, deleted))
+      my$extinct_secondary <- unique(c(my$extinct_secondary, setdiff(nodes_before, deleted)))
+      
+      my$gg <- NULL
+      
+      updateSelectInput(session, "vertexToDelete", choices = character(0))
+      
+      return()
+    }
+    
+    # Otherwise safe to apply
+    my$gg <- gg_test
     
     after_nodes <- NPS(my$gg)$node
     
