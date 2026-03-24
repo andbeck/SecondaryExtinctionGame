@@ -181,21 +181,21 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$refresh, {
-  
-  # reset ecosystem
-  my$gg <- gg
-  
-  # clear graveyard
-  my$extinct_primary <- character()
-  my$extinct_secondary <- character()
-  
-  # reset dropdown
-  updateSelectInput(
-    session,
-    "vertexToDelete",
-    choices = NPS(my$gg)$node
-  )
-})
+    
+    # reset ecosystem
+    my$gg <- gg
+    
+    # clear graveyard
+    my$extinct_primary <- character()
+    my$extinct_secondary <- character()
+    
+    # reset dropdown
+    updateSelectInput(
+      session,
+      "vertexToDelete",
+      choices = NPS(my$gg)$node
+    )
+  })
   
   # =========================
   # GRAVEYARD UI OUTPUTS
