@@ -69,6 +69,8 @@ ui <- fluidPage(
       p("This is a simple game where you choose to make a species extinct and reveal what the consequences 
         are as these extinctions 'cascade' through
         a food web."),
+      p("The food web is shown below and has 6 species comprised of 3 plants, 2 herbivores and 1 predator.  
+        The numbers on the left defined 'trophic levels'"),
       br(),
       p(HTML("<strong>PRIMARY EXTINCTION:</strong> A species goes extinct usually due to an environmental factor or overharvesting.")),
       p(HTML("<strong>SECONDARY EXTINCTION:</strong> When a species goes extinct, sometimes it can affect other species, leading
