@@ -8,16 +8,58 @@ library(ggimage)
 library(ggnetwork)
 
 # nodes and links (pairs are links)
+#g <- make_graph(c(
+#  # The Keystone Bottleneck
+#  "Lion", "Impala (Keystone)",
+#  "Leopard", "Impala (Keystone)",
+#  "Impala (Keystone)", "SuperPlant",
+#  
+#  # Peripheral dependencies
+#  "Impala (Keystone)", "Plant2",
+#  "Zebra (Specialist)", "SuperPlant",
+#  "Wild Dog", "Zebra (Specialist)"))
+
+#g <- make_graph(c(
+#  
+#  # Level 4 → Level 3
+#  "Tyrannosaurus rex", "Allosaurus",
+#  "Tyrannosaurus rex", "Velociraptor",
+#  
+#  # Level 3 → Level 2
+#  "Allosaurus", "Stegosaurus",
+#  "Allosaurus", "Edmontosaurus",
+#  "Velociraptor", "Edmontosaurus",
+#  "Velociraptor", "Triceratops",
+#  
+#  # Level 2 → Level 1
+#  "Stegosaurus", "Cycads",
+#  "Stegosaurus", "Ferns",
+#  
+#  "Edmontosaurus", "Cycads",
+#  "Edmontosaurus", "Ginkgo",
+#  
+#  "Triceratops", "Ferns",
+#  "Triceratops", "Ginkgo"
+#))
+
 g <- make_graph(c(
-  # The Keystone Bottleneck
-  "Lion", "Impala (Keystone)",
-  "Leopard", "Impala (Keystone)",
-  "Impala (Keystone)", "SuperPlant",
   
-  # Peripheral dependencies
-  "Impala (Keystone)", "Plant2",
-  "Zebra (Specialist)", "SuperPlant",
-  "Wild Dog", "Zebra (Specialist)"))
+  # Apex level
+  "Tyrannosaurus rex", "Allosaurus",
+  "Tyrannosaurus rex", "Velociraptor",
+  
+  # Secondary → Primary
+  "Velociraptor", "Triceratops",
+  
+  "Allosaurus", "Stegosaurus",
+  "Allosaurus", "Triceratops",
+  
+  # Primary → Producers (shared but not perfectly symmetrical)
+  "Stegosaurus", "Cycads",
+  "Stegosaurus", "Ferns",
+  
+  "Triceratops", "Ferns"
+))
 
 # cheddar community pieces
 prop <- list(title = "foodweb")
