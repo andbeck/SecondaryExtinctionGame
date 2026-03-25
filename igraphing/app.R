@@ -148,9 +148,10 @@ ui <- navbarPage(
       
       tags$footer(
         class = "footer-credits",
-        p(HTML("<strong>Credits:</strong> Silhouette images are by Andrea Moro and T. Michael Keesey (<i>Setaria italica</i>), 
-           Andy Wilson (<i>Equus quagga burchellii</i>), Margot Michaud (<i>Panthera pardus</i>), [unknown] 
-           (<i>Aepyceros melampus</i>), and others (<i>Lycaon pictus, Panthera leo, Poa pratensis</i>)."))
+        p(HTML("<strong>Credits:</strong> Silhouette images are by Cy Marchant (<i>Wuerhosaurus ultimus</i>), <i>Ferran Sayol</i> 
+           (Blechum), Jagged Fang Designs (<i> Allosaurus europaeus, Triceratops prorsus </i>), Pete Buchholz (<i>Edmontosaurus 
+           regalis</i>), Richard Rich (<i>Tyrannosaurus rex</i>), Scott Hartman (<i>Velociraptor mongoliensis</i>), and others 
+           (<i>Cycas revoluta</i>)."))
       )
     )
   )
