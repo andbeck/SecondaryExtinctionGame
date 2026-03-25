@@ -43,51 +43,74 @@ gg <- Community(properties = prop,
 
 # Shiny Units ----
 
+# for style matching
+
+
 ## UI ----
-ui <- fluidPage( 
-  titlePanel("Secondary Extinction Dynamics - A Game"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("vertexToDelete", "Species to delete", choices=NPS(gg)$node),
-      actionButton("goButtonDelete", "Evaluate"),
-      
-      shinyjs::useShinyjs(),
-      shinyjs::extendShinyjs(text = "shinyjs.refresh_page = function() { location.reload(); }", functions = "refresh_page"),
-      actionButton("refresh", "Refresh Food Web"),
-      hr(),
-      h4("☠️ Graveyard"),
-      h5("Primary Extinctions"),
-      uiOutput("primaryExtinctList"),
-      h5("Secondary Extinctions"),
-      uiOutput("secondaryExtinctList"),
-      
-      hr(),
-    ),
-    
-    # Show a plot of the graph
-    mainPanel(
-      p("This is a simple game where you choose to make a species extinct and reveal what the consequences 
-        are as these extinctions 'cascade' through
-        a food web."),
-      p("The food web is shown below and has 6 species comprised of 3 plants, 2 herbivores and 1 predator.  
-        The numbers on the left defined 'trophic levels'"),
-      br(),
-      p(HTML("<strong>PRIMARY EXTINCTION:</strong> A species goes extinct usually due to an environmental factor or overharvesting.")),
-      p(HTML("<strong>SECONDARY EXTINCTION:</strong> When a species goes extinct, sometimes it can affect other species, leading
-        to a secondary extinction. The most often happens when a resource goes extinct leaving
-        a species with nothing else to eat.")),
-      br(),
-      p("Let's see if you you identify for which species there will be no secondary extinctions and for which species there
-        will be at least one secondary extinction"),
-      plotOutput("graphPlot", height = "70vh"))
-  ), # end of sidebarLayout
+ui <- navbarPage(
   
-  hr(), # Adds a visual line separator
-  tags$footer(
-    style = "font-size: 0.8em; color: #666; padding: 20px 0;",
-    p(HTML("<strong>Credits:</strong> Silhouette images are by Andrea Moro and T. Michael Keesey (<i>Setaria italica</i>), 
+  title = div(
+    tags$img(src = "logo.png", class = "navbar-logo"),
+    "Secondary Extinction Dynamics"
+  ),
+  
+  header = tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+  ),
+  
+  tabPanel(
+    "Game",
+    
+    fluidPage(
+      sidebarLayout(
+        sidebarPanel(
+          selectInput("vertexToDelete", "Species to delete", choices=NPS(gg)$node),
+          actionButton("goButtonDelete", "Evaluate"),
+          
+          shinyjs::useShinyjs(),
+          shinyjs::extendShinyjs(
+            text = "shinyjs.refresh_page = function() { location.reload(); }",
+            functions = "refresh_page"
+          ),
+          
+          actionButton("refresh", "Refresh Food Web"),
+          hr(),
+          h4("☠️ Graveyard"),
+          h5("Primary Extinctions"),
+          uiOutput("primaryExtinctList"),
+          h5("Secondary Extinctions"),
+          uiOutput("secondaryExtinctList"),
+          hr()
+        ),
+        
+        mainPanel(
+          p("This is a simple game where you choose to make a species extinct and reveal what the consequences are as these extinctions cascade through a food web."),
+          
+          p("The food web is shown below and has 6 species comprised of 2 plants, 2 herbivores and 3 predator. The numbers on the left define trophic levels."),
+          
+          br(),
+          
+          p(HTML("<strong>PRIMARY EXTINCTION:</strong> A species goes extinct usually due to an environmental factor or overharvesting.")),
+          
+          p(HTML("<strong>SECONDARY EXTINCTION:</strong> When a species goes extinct, it can affect other species, leading to cascading loss.")),
+          
+          br(),
+          
+          p("Try to identify which species cause no cascade vs at least one secondary extinction."),
+          
+          plotOutput("graphPlot", height = "70vh")
+        )
+      ),
+      
+      hr(),
+      
+      tags$footer(
+        class = "footer-credits",
+        p(HTML("<strong>Credits:</strong> Silhouette images are by Andrea Moro and T. Michael Keesey (<i>Setaria italica</i>), 
            Andy Wilson (<i>Equus quagga burchellii</i>), Margot Michaud (<i>Panthera pardus</i>), [unknown] 
            (<i>Aepyceros melampus</i>), and others (<i>Lycaon pictus, Panthera leo, Poa pratensis</i>)."))
+      )
+    )
   )
 )
 
