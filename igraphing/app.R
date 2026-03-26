@@ -128,7 +128,7 @@ ui <- navbarPage(
         mainPanel(
           p("This is a simple game where you choose to make a species extinct and reveal what the consequences are as these extinctions cascade through a food web."),
           
-          p("The food web is shown below and has 6 species comprised of 2 plants, 2 herbivores and 3 predator. The numbers on the left define trophic levels."),
+          p("The food web is shown below and has 6 species comprised of 2 plants, 2 herbivores and 2 meso predators and 1 top predator."),
           
           br(),
           
