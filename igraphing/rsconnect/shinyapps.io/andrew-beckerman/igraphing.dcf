@@ -1,0 +1,12 @@
+name: igraphing
+title: igraphing
+username: andrew-beckerman
+account: andrew-beckerman
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17809007
+bundleId: 12498764
+url: https://andrew-beckerman.shinyapps.io/igraphing/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
