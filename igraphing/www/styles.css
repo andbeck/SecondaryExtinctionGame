@@ -259,3 +259,32 @@ footer {
   background-color: transparent !important;
   border-bottom: 3px solid #DB8655;
 }
+
+
+/* Hide all numeric labels on Shiny sliders */
+.irs-min,
+.irs-max,
+.irs-from,
+.irs-to,
+.irs-single,
+.irs-grid-text,
+.irs-grid-pol {
+  display: none !important;
+}
+
+/* Also hide labels from newer slider implementations */
+.shiny-input-container .slider-tick-label {
+  display: none !important;
+}
+
+
+/* Hide the value bubble and min/max labels on Shiny sliders */
+.irs--shiny .irs-min,
+.irs--shiny .irs-max,
+.irs--shiny .irs-from,
+.irs--shiny .irs-to,
+.irs--shiny .irs-single {
+  display: none !important;
+}
+
+
