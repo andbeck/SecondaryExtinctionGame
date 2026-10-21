@@ -7,7 +7,7 @@
 ui <- navbarPage(
   title = div(
     tags$img(src = "logo.png", class = "navbar-logo"),
-    "Secondary Extinction Dynamics"
+    "Extinction Games"
   ),
   
   header = tags$head(
