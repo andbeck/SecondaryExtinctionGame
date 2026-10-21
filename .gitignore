@@ -9,3 +9,6 @@
 # MacOS nonsense
 .DS_Store
 .positai
+igraphing/build_webs/ExtinctionSims.jl
+igraphing/build_webs/networks.jlds
+igraphing/build_webs/pfim_metaweb.jld2
