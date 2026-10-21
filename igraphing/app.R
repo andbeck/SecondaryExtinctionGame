@@ -29,6 +29,11 @@ ui <- navbarPage(
       "connectance",
       n = length(connectance_plots)
     )
+  ),
+  
+  tabPanel(
+    "Extinction Scenarios",
+    scenarioMatchingUI("scenario_matching")
   )
 )
 
@@ -39,6 +44,8 @@ server <- function(input, output, session) {
   )
   
   connectanceServer("connectance")
+  
+  scenarioMatchingServer("scenario_matching")
 }
 
 shinyApp(ui = ui, server = server)
