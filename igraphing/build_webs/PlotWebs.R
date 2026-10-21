@@ -15,8 +15,8 @@ calc_node_tl <- function(fw) {
   return(TL)
 }
 
-edgelists <- read_csv("igraphing/niche_webs/edgelists.csv")
-robustness <- read_csv("igraphing/niche_webs/robustness.csv")
+edgelists <- read_csv("igraphing/build_webs/edgelists.csv")
+robustness <- read_csv("igraphing/build_webs/robustness.csv")
 
 # Function to create both plots for one net_id
 plot_net <- function(id) {
