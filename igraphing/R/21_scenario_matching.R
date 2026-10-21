@@ -5,10 +5,12 @@
 # Helper: plot a network using shared node positions
 # --------------------------------------------------
 
+
 plot_extinction_network <- function(
     edges,
     plot_title,
-    shared_layout
+    shared_layout,
+    retained_species = NULL
 ) {
   
   edges <- unique(
@@ -35,11 +37,25 @@ plot_extinction_network <- function(
     vertices = data.frame(name = present_nodes)
   )
   
+  node_names <- igraph::V(graph)$name
+  
   network_layout <- shared_layout[
-    igraph::V(graph)$name,
+    node_names,
     ,
     drop = FALSE
   ]
+  
+  # Default: all nodes teal
+  node_colours <- rep("#005C53", length(node_names))
+  
+  # If a retained-species vector is supplied, colour by retention
+  if (!is.null(retained_species)) {
+    node_colours <- ifelse(
+      node_names %in% retained_species,
+      "#005C53",
+      "#DB8655"
+    )
+  }
   
   plot(
     graph,
@@ -47,12 +63,29 @@ plot_extinction_network <- function(
     main = plot_title,
     vertex.size = 7,
     vertex.label = NA,
+    vertex.color = node_colours,
     edge.arrow.size = 0.25,
     edge.color = "grey65",
-    vertex.color = "#005C53",
     margin = 0.05
   )
+  
+  # Add a legend only to the retention-coloured network
+  if (!is.null(retained_species)) {
+    legend(
+      "topleft",
+      legend = c(
+        "Retained in simulation",
+        "Absent from simulation"
+      ),
+      col = c("#005C53", "#DB8655"),
+      pch = 19,
+      pt.cex = 1.1,
+      bty = "n",
+      cex = 0.8
+    )
+  }
 }
+
 
 
 # --------------------------------------------------
@@ -133,12 +166,13 @@ scenarioMatchingUI <- function(id) {
         width = 8,
         
         # Two networks in one row
+        
         fluidRow(
           
           column(
             width = 6,
             
-            h4("Simulated network"),
+            h4("Simulated species retention"),
             
             plotOutput(
               ns("simulated_network"),
@@ -297,10 +331,12 @@ scenarioMatchingServer <- function(id) {
     # Simulated network for selected mechanism
     # ----------------------------------------------
     
+    
     output$simulated_network <- renderPlot({
       
       req(input$mechanism)
       
+      # The selected simulation's final edge list
       simulated_edges <- extinction_edge[
         extinction_edge$extinction_mechanism ==
           input$mechanism,
@@ -308,16 +344,33 @@ scenarioMatchingServer <- function(id) {
         drop = FALSE
       ]
       
+      validate(
+        need(
+          nrow(simulated_edges) > 0L,
+          "No simulated network found for this mechanism."
+        )
+      )
+      
+      # Species present in the simulated final community
+      retained_species <- unique(c(
+        as.character(simulated_edges$consumer),
+        as.character(simulated_edges$resource)
+      ))
+      
+      # Plot the KNOWN post-extinction structure,
+      # coloured by the simulation's retained species
       plot_extinction_network(
-        edges = simulated_edges,
+        edges = post_edge,
         plot_title = paste(
-          "Simulated:",
+          "Post-extinction structure:",
           gsub("_", " ", input$mechanism)
         ),
-        shared_layout = shared_layout
+        shared_layout = shared_layout,
+        retained_species = retained_species
       )
       
     })
+    
     
     
     # ----------------------------------------------
